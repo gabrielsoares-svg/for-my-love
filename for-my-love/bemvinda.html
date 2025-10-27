@@ -18,6 +18,7 @@
       color: white;
       text-align: center;
       overflow: hidden;
+      position: relative;
     }
 
     h1 {
@@ -30,6 +31,7 @@
       font-size: 1.2em;
       margin-bottom: 20px;
       max-width: 300px;
+      line-height: 1.5;
     }
 
     #coracao {
@@ -38,6 +40,7 @@
       cursor: pointer;
       animation: pulse 1.5s infinite;
       transition: transform 0.3s;
+      user-select: none;
     }
 
     #coracao:active {
@@ -50,46 +53,111 @@
       100% { transform: scale(1); }
     }
 
-    audio {
+    button {
       margin-top: 25px;
-      width: 250px;
-      border-radius: 15px;
-      outline: none;
+      background-color: white;
+      color: #ff69b4;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    button:hover {
+      background-color: #ffe4f1;
+      transform: scale(1.05);
     }
 
-    .fade-in {
-      animation: fadeIn 1s ease forwards;
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <h1 class="fade-in">💗 Bem-vinda, minha Alicia 💗</h1>
-  <p class="fade-in">Você é a razão de tudo ficar mais bonito.  
-  <br>Agora relaxa e ouve essa música comigo 🎶</p>
+  <canvas id="coracoes"></canvas>
 
-  <div id="coracao" class="fade-in">❤️</div>
+  <h1>💗 Bem-vinda, minha Alicia 💗</h1>
+  <p>Você é a razão de tudo ficar mais bonito.<br>
+  Agora relaxa e ouve essa música comigo 🎶</p>
 
-  <audio id="musica" controls autoplay>
-    <source src="https://raw.githubusercontent.com/gabrielsoares-svg/clonacartao/main/Mitski%20-%20My%20Love%20Mine%20All%20Mine%20(Official%20Lyric%20Video)(MP3_160K).mp3" type="audio/mpeg">
+  <div id="coracao">❤️</div>
+
+  <audio id="musica">
+    <source src="https://raw.githubusercontent.com/gabrielsoares-svg/for-my-love/main/for-my-love/Mitski%20-%20My%20Love%20Mine%20All%20Mine%20(Official%20Lyric%20Video)(MP3_160K).mp3" type="audio/mpeg">
     Seu navegador não suporta áudio.
   </audio>
 
+  <button onclick="window.location.href='bau.html'">Ir para o Baú das Memórias</button>
+
   <script>
+    // Música com clique no coração
     const coracao = document.getElementById('coracao');
     const musica = document.getElementById('musica');
+    let tocando = false;
 
     coracao.addEventListener('click', () => {
-      if (musica.paused) {
+      if (!tocando) {
         musica.play();
+        tocando = true;
       } else {
         musica.pause();
+        tocando = false;
       }
+    });
+
+    // Animação de corações subindo
+    const canvas = document.getElementById('coracoes');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const coracoes = [];
+
+    function criarCoracao() {
+      return {
+        x: Math.random() * canvas.width,
+        y: canvas.height + 10,
+        tamanho: 10 + Math.random() * 20,
+        velocidade: 1 + Math.random() * 2,
+        opacidade: 1
+      };
+    }
+
+    function desenhar(c) {
+      ctx.beginPath();
+      ctx.moveTo(c.x, c.y);
+      ctx.bezierCurveTo(c.x - c.tamanho / 2, c.y - c.tamanho / 2, c.x - c.tamanho, c.y + c.tamanho / 3, c.x, c.y + c.tamanho);
+      ctx.bezierCurveTo(c.x + c.tamanho, c.y + c.tamanho / 3, c.x + c.tamanho / 2, c.y - c.tamanho / 2, c.x, c.y);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(255,105,180,${c.opacidade})`;
+      ctx.fill();
+    }
+
+    function animar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (Math.random() < 0.05) coracoes.push(criarCoracao());
+      coracoes.forEach((c, i) => {
+        c.y -= c.velocidade;
+        c.opacidade -= 0.005;
+        desenhar(c);
+        if (c.opacidade <= 0) coracoes.splice(i, 1);
+      });
+      requestAnimationFrame(animar);
+    }
+
+    animar();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
   </script>
 </body>
 </html>
+
