@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bem-vinda, meu amor 💖</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff8da1, #ffb6c1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      max-width: 300px;
+    }
+
+    #coracao {
+      font-size: 3em;
+      color: #ff2d7a;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+      transition: transform 0.3s;
+    }
+
+    #coracao:active {
+      transform: scale(1.3);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    audio {
+      margin-top: 25px;
+      width: 250px;
+      border-radius: 15px;
+      outline: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="fade-in">💗 Bem-vinda, minha Alicia 💗</h1>
+  <p class="fade-in">Você é a razão de tudo ficar mais bonito.  
+  <br>Agora relaxa e ouve essa música comigo 🎶</p>
+
+  <div id="coracao" class="fade-in">❤️</div>
+
+  <audio id="musica" controls autoplay>
+    <source src="https://raw.githubusercontent.com/gabrielsoares-svg/clonacartao/main/Mitski%20-%20My%20Love%20Mine%20All%20Mine%20(Official%20Lyric%20Video)(MP3_160K).mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    const coracao = document.getElementById('coracao');
+    const musica = document.getElementById('musica');
+
+    coracao.addEventListener('click', () => {
+      if (musica.paused) {
+        musica.play();
+      } else {
+        musica.pause();
+      }
+    });
+  </script>
+</body>
+</html>
